@@ -1,6 +1,10 @@
 const inquirer = require("inquirer");
 const generatePage = require("./src/page-template");
 const { writeFile, copyFile } = require("./utils/generate-site");
+const fs = require("fs");
+const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const allEmployees = [];
 
 const validateEmail = (email) => {
   //if() add validation here, mus thave @
@@ -8,7 +12,7 @@ const validateEmail = (email) => {
 };
 
 const promptUser = () => {
-  return inquirer.prompt([
+ return inquirer.prompt([
     {
       type: "input",
       name: "manager_name",
@@ -42,9 +46,9 @@ const promptUser = () => {
 };
 
 const promptEmployee = (employeeData) => {
-  if (typeof employeeData.employees == "undefined") {
-    employeeData.employees = [];
-  }
+  // if (typeof employeeData.employees == "undefined") {
+  //   employeeData.employees = [];
+  // }
 
   console.log(`
 =================
@@ -61,13 +65,13 @@ Add a New employee
       },
     ])
     .then((answer) => {
-      console.log(answer, answer.choice);
+      //console.log(answer, answer.choice);
       if (answer.choice == "engineer") {
         return inquirer
           .prompt([
             {
               type: "input",
-              name: "name",
+              name: "engineer_name",
               message: "Enter the engineer's name? (Required)",
               validate: (nameInput) => {
                 if (nameInput) {
@@ -80,12 +84,12 @@ Add a New employee
             },
             {
               type: "input",
-              name: "empid",
+              name: "engineer_empid",
               message: "Provide the engineer's employee ID:",
             },
             {
               type: "input",
-              name: "email",
+              name: "engineer_email",
               message: "Provide the engineer's email address:",
             },
 
@@ -111,22 +115,28 @@ Add a New employee
             },
           ])
           .then((engineerData) => {
-            employeeData.employees.push(engineerData);
+            const engineer = new Engineer(
+              engineerData.engineer_name,
+              engineerData.engineer_empid,
+              engineerData.engineer_email,
+              engineerData.github
+            );
+            allEmployees.push(engineer);
+    console.log(allEmployees)
+
             if (engineerData.confirmAddEmployee) {
               return promptEmployee(employeeData);
             } else {
-              return employeeData;
+              let htmlfile = generatePage(allEmployees);
+              writeToFile("./dist/index.html", htmlfile);
             }
           });
-
-        //MB end
       } else if (answer.choice == "intern") {
-        // todo
         return inquirer
           .prompt([
             {
               type: "input",
-              name: "name",
+              name: "intern_name",
               message: "Enter the intern's name? (Required)",
               validate: (nameInput) => {
                 if (nameInput) {
@@ -139,21 +149,21 @@ Add a New employee
             },
             {
               type: "input",
-              name: "empid",
+              name: "intern_empid",
               message: "Provide the intern's employee ID:",
             },
             {
               type: "input",
-              name: "email",
+              name: "intern_email",
               message: "Provide the intern's email address:",
             },
 
             {
               type: "input",
-              name: "github",
+              name: "school",
               message: "Enter the intern's school (Required)",
-              validate: (githubInput) => {
-                if (githubInput) {
+              validate: (schoolInput) => {
+                if (schoolInput) {
                   return true;
                 } else {
                   console.log("Please enter the intern's school!");
@@ -161,63 +171,73 @@ Add a New employee
                 }
               },
             },
+            {
+              type: "confirm",
+              name: "confirmAddEmployee",
+              message: "Would you like to enter another employee?",
+              default: false,
+            },
           ])
           .then((internData) => {
             employeeData.employees.push(internData);
             if (internData.confirmAddEmployee) {
               return promptEmployee(employeeData);
             } else {
-              return employeeData;
+              let htmlfile = generatePage(allEmployees);
+              writeToFile("./dist/index.html", htmlfile);
             }
           });
       } else {
-        return employeeData;
+        let htmlfile = generatePage(allEmployees);
+        writeToFile("./dist/index.html", htmlfile);
       }
     });
 };
 
-/*
-])
-.then((projectData) => {
-  employeeData.projects.push(projectData);
-  if (projectData.confirmAddProject) {
-    return promptEmployee(employeeData);
-  } else {
-    return employeeData;
-  }
-});
-
-
-
-/*
-    ])
-    .then((projectData) => {
-      employeeData.projects.push(projectData);
-      if (projectData.confirmAddProject) {
-        return promptEmployee(employeeData);
-      } else {
-        return employeeData;
+// Create a function to write README file
+function writeToFile(fileName, data) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(fileName, data, (err) => {
+      if (err) {
+        reject(err);
+        return;
       }
+      resolve({
+        message: "File created!",
+      });
     });
-};*/
+  });
+}
 
 promptUser()
-  .then(promptEmployee)
+  //.then(promptEmployee)
   .then((employeeData) => {
     console.log(employeeData);
-    return "";
+    const manager = new Manager(
+      employeeData.manager_name,
+      employeeData.manager_empid,
+      employeeData.manager_email,
+      employeeData.manager_office
+    );
+    allEmployees.push(manager);
+    promptEmployee();
+    console.log(allEmployees)
+    //return "";
     //return generatePage(employeeData);
+    //to test
+
+    //end test
+  });
+/* .then((pageHTML) => {
+    return writeFile(pageHTML);
   })
-  // .then((pageHTML) => {
-  //   return writeFile(pageHTML);
-  // })
-  // .then((writeFileResponse) => {
-  //   console.log(writeFileResponse);
-  //   return copyFile();
-  // })
-  // .then((copyFileResponse) => {
-  //   console.log(copyFileResponse);
-  // })
+  .then((writeFileResponse) => {
+    console.log(writeFileResponse);
+    return copyFile();
+  })
+  .then((copyFileResponse) => {
+    console.log(copyFileResponse);
+  })
   .catch((err) => {
     console.log(err);
-  });
+  }); */

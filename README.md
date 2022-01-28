@@ -1,5 +1,7 @@
 # team_profile_generator
 
+This project is a Node.js command-line application that takes in information about employees on a software engineering team and generates an HTML webpage that displays summaries for each person.
+
 ## Acceptance Criteria
 GIVEN a command-line application that accepts user input
 WHEN I am prompted for my team members and their information
@@ -18,3 +20,9 @@ WHEN I select the intern option
 THEN I am prompted to enter the intern’s name, ID, email, and school, and I am taken back to the menu
 WHEN I decide to finish building my team
 THEN I exit the application, and the HTML is generated
+
+Tools Used:
+Inquirer 
+Jest
+
+//add link to screencastify video
