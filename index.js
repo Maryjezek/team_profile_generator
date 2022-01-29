@@ -4,6 +4,8 @@ const { writeFile, copyFile } = require("./utils/generate-site");
 const fs = require("fs");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
+
 const allEmployees = [];
 
 const validateEmail = (email) => {
@@ -12,7 +14,7 @@ const validateEmail = (email) => {
 };
 
 const promptUser = () => {
- return inquirer.prompt([
+  return inquirer.prompt([
     {
       type: "input",
       name: "manager_name",
@@ -122,7 +124,7 @@ Add a New employee
               engineerData.github
             );
             allEmployees.push(engineer);
-    console.log(allEmployees)
+            //console.log(allEmployees);
 
             if (engineerData.confirmAddEmployee) {
               return promptEmployee(employeeData);
@@ -179,7 +181,16 @@ Add a New employee
             },
           ])
           .then((internData) => {
-            employeeData.employees.push(internData);
+            const intern = new Intern(
+              internData.intern_name,
+              internData.intern_empid,
+              internData.intern_email,
+              internData.school
+            );
+
+            allEmployees.push(intern);
+            //console.log(employeeData);
+
             if (internData.confirmAddEmployee) {
               return promptEmployee(employeeData);
             } else {
@@ -188,13 +199,13 @@ Add a New employee
             }
           });
       } else {
+        console.log(employeeData);
         let htmlfile = generatePage(allEmployees);
         writeToFile("./dist/index.html", htmlfile);
       }
     });
 };
 
-// Create a function to write README file
 function writeToFile(fileName, data) {
   return new Promise((resolve, reject) => {
     fs.writeFile(fileName, data, (err) => {
@@ -209,35 +220,15 @@ function writeToFile(fileName, data) {
   });
 }
 
-promptUser()
-  //.then(promptEmployee)
-  .then((employeeData) => {
-    console.log(employeeData);
-    const manager = new Manager(
-      employeeData.manager_name,
-      employeeData.manager_empid,
-      employeeData.manager_email,
-      employeeData.manager_office
-    );
-    allEmployees.push(manager);
-    promptEmployee();
-    console.log(allEmployees)
-    //return "";
-    //return generatePage(employeeData);
-    //to test
-
-    //end test
-  });
-/* .then((pageHTML) => {
-    return writeFile(pageHTML);
-  })
-  .then((writeFileResponse) => {
-    console.log(writeFileResponse);
-    return copyFile();
-  })
-  .then((copyFileResponse) => {
-    console.log(copyFileResponse);
-  })
-  .catch((err) => {
-    console.log(err);
-  }); */
+promptUser().then((employeeData) => {
+  //console.log(employeeData);
+  const manager = new Manager(
+    employeeData.manager_name,
+    employeeData.manager_empid,
+    employeeData.manager_email,
+    employeeData.manager_office
+  );
+  allEmployees.push(manager);
+  promptEmployee();
+  //console.log(allEmployees);
+});

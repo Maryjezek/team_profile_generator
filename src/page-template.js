@@ -1,4 +1,3 @@
-
 // create the team member sections
 const generateTeam = (employeeData) => {
   return employeeData.map((employee) => {
@@ -21,6 +20,17 @@ const generateTeam = (employeeData) => {
       <p>Name: ${employee.getName()}</p>
       <p>ID: ${employee.getId()}</p>
       <a href="https://github.com/${employee.getGithub()}">Go to ${employee.getGithub()}'s Github <i class="fa fa-github"></i></a>
+      <p><button>Email: ${employee.getEmail()}</button></p>
+    </div>`;
+    }
+    else if (role == "Intern") {
+      //console.log("Engineer role was chosen");
+
+      return `<div class="card">
+      <h1>${role}</h1>
+      <p>Name: ${employee.getName()}</p>
+      <p>ID: ${employee.getId()}</p>
+      <p>School: ${employee.getSchool()}</p>
       <p><button>Email: ${employee.getEmail()}</button></p>
     </div>`;
     }
@@ -49,6 +59,11 @@ module.exports = function (templateData) {
   </head>
   
   <body>
+  <header>
+  <div class=" flex-row justify-space-between align-center py-3">
+      <h1 class = "center">My Team</h1>
+      </div>
+  </header>
   
       ${generateTeam(templateData)}
   

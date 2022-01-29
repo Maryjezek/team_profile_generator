@@ -22,6 +22,10 @@
   margin: auto;
   text-align: center;
   font-family: arial;
+  display: inline-block;
+  margin: 5px 0;
+
+  
 }
 
 .title {
@@ -118,6 +122,9 @@ header {
   background-color: var(--primary);
   position: sticky;
   top: 0;
+  display: block;
+  height: 100px;
+  margin-bottom: 100px;
 }
 
 nav {
