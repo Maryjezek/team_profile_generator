@@ -10,7 +10,8 @@ const generateTeam = (employeeData) => {
       <p>Name: ${employee.getName()}</p>
       <p>ID: ${employee.getId()}</p>
       <p>Office Number: ${employee.getOfficeNumber()}</p>
-           <p><button>Email: ${employee.getEmail()}</button></p>
+      <p><button>Email: <a href="mailto:${employee.getEmail()}">${employee.getEmail()}</button></p>
+           
     </div>`;
     } else if (role == "Engineer") {
       //console.log("Engineer role was chosen");
@@ -20,10 +21,9 @@ const generateTeam = (employeeData) => {
       <p>Name: ${employee.getName()}</p>
       <p>ID: ${employee.getId()}</p>
       <a href="https://github.com/${employee.getGithub()}">Go to ${employee.getGithub()}'s Github <i class="fa fa-github"></i></a>
-      <p><button>Email: ${employee.getEmail()}</button></p>
+      <p><button>Email: <a href="mailto:${employee.getEmail()}">${employee.getEmail()}</button></p>
     </div>`;
-    }
-    else if (role == "Intern") {
+    } else if (role == "Intern") {
       //console.log("Engineer role was chosen");
 
       return `<div class="card">
@@ -31,8 +31,8 @@ const generateTeam = (employeeData) => {
       <p>Name: ${employee.getName()}</p>
       <p>ID: ${employee.getId()}</p>
       <p>School: ${employee.getSchool()}</p>
-      <p><button>Email: ${employee.getEmail()}</button></p>
-    </div>`;
+      <p><button>Email: <a href="mailto:${employee.getEmail()}">${employee.getEmail()}</button></p>
+         </div>`;
     }
 
     //add the else if if Intern here
