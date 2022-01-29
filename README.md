@@ -25,4 +25,5 @@ Tools Used:
 Inquirer 
 Jest
 
-//add link to screencastify video
+link to screencastify video
+https://watch.screencastify.com/v/jeuEc9Z7z45wiykstSCn
